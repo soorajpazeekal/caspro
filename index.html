@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+  
+  
+  
+  
+<head>
+  <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
+<script type="text/javascript">
+    window.cookieconsent_options = {"message":"This website uses cookies to ensure you get the best experience on our website","dismiss":"Got it!","learnMore":"More info","link":"http://casprobeta.glitch.me/","theme":"light-top"};
+</script>
+
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.10/cookieconsent.min.js"></script>
+<!-- End Cookie Consent plugin -->
+
+  <script type="text/javascript" data-cfasync="false">
+        var _foxpush = _foxpush || [];
+        _foxpush.push(['_setDomain', 'bscprojectglitchme']);
+
+        (function(){
+            var foxscript = document.createElement('script');
+            foxscript.src = '//cdn.foxpush.net/sdk/foxpush_SDK_min.js';
+            foxscript.type = 'text/javascript';
+            foxscript.async = 'true';
+            var fox_s = document.getElementsByTagName('script')[0];
+            fox_s.parentNode.insertBefore(foxscript, fox_s);})();
+    </script>
+  
+<script>alert("Hi User. I have a message for you! You can communicate with voice. so i need a permission for use your device microphone. so please 'ALLOW' it.📱📞⭐🐱");</script>
+  <title>Caspro</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  
+  
+  
+ 
+<script>
+  
+
+      window.fbMessengerPlugins = window.fbMessengerPlugins || {
+        init: function () {
+          FB.init({
+            appId            : 'own app id here1',
+            autoLogAppEvents : true,
+            xfbml            : true,
+            version          : 'v2.10'
+          });
+        }, callable: []
+      };
+      window.fbAsyncInit = window.fbAsyncInit || function () {
+        window.fbMessengerPlugins.callable.forEach(function (item) { item(); });
+        window.fbMessengerPlugins.init();
+      };
+      setTimeout(function () {
+        (function (d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) { return; }
+          js = d.createElement(s);
+          js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk/xfbml.customerchat.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+      }, 0);
+      </script>
+      
+      <div
+        position: "left"
+        class="fb-customerchat"
+        page_id="1014060668732057"
+        ref="">
+      </div>
+    
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script>var msg = new SpeechSynthesisUtterance('Hi friend...... This Is Caspro. Before using make sure you are now on google chrome browser');
+window.speechSynthesis.speak(msg);</script>
+  <script type="text/javascript">
+    var accessToken = "dialogflow access token",
+      baseUrl = "https://api.api.ai/v1/", // if you are using v2 accessToken, enter V2 insted of V1.
+      $speechInput,
+      $recBtn,
+      recognition,
+      messageRecording = "Recording...",
+      messageCouldntHear = "I couldn't hear you, could you say that again?",
+      messageInternalError = "Oh no, there has been an internal server error",
+      messageSorry = "I'm sorry, I don't have the answer to that yet. think im not a human";
+    $(document).ready(function() {
+      $speechInput = $("#speech");
+      $recBtn = $("#rec");
+      $speechInput.keypress(function(event) {
+        if (event.which == 13) {
+          event.preventDefault();
+          send();
+        }
+      });
+      $recBtn.on("click", function(event) {
+        switchRecognition();
+      });
+      $(".debug__btn").on("click", function() {
+        $(this).next().toggleClass("is-active");
+        return false;
+      });
+    });
+    function startRecognition() {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+          recognition.interimResults = false;
+      recognition.onstart = function(event) {
+        respond(messageRecording);
+        updateRec();
+      };
+      recognition.onresult = function(event) {
+        recognition.onend = null;
+        
+        var text = "";
+          for (var i = event.resultIndex; i < event.results.length; ++i) {
+            text += event.results[i][0].transcript;
+          }
+          setInput(text);
+        stopRecognition();
+      };
+      recognition.onend = function() {
+        respond(messageCouldntHear);
+        stopRecognition();
+      };
+      recognition.lang = "en-US";
+      recognition.start();
+    }
+  
+    function stopRecognition() {
+      if (recognition) {
+        recognition.stop();
+        recognition = null;
+      }
+      updateRec();
+    }
+    function switchRecognition() {
+      if (recognition) {
+        stopRecognition();
+      } else {
+        startRecognition();
+      }
+    }
+    function setInput(text) {
+      $speechInput.val(text);
+      send();
+    }
+    function updateRec() {
+      $recBtn.text(recognition ? "Stop" : "Speak");
+    }
+    function send() {
+      var text = $speechInput.val();
+      $.ajax({
+        type: "POST",
+        url: baseUrl + "query",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        headers: {
+          "Authorization": "Bearer " + accessToken
+        },
+        data: JSON.stringify({query: text, lang: "en", sessionId: "yaydevdiner"}),
+        success: function(data) {
+          prepareResponse(data);
+        },
+        error: function() {
+          respond(messageInternalError);
+        }
+      });
+    }
+    function prepareResponse(val) {
+      var debugJSON = JSON.stringify(val, undefined, 2),
+        spokenResponse = val.result.speech;
+      respond(spokenResponse);
+      debugRespond(debugJSON);
+    }
+    function debugRespond(val) {
+      $("#response").text(val);
+    }
+    function respond(val) {
+      if (val == "") {
+        val = messageSorry;
+      }
+      if (val !== messageRecording) {
+        var msg = new SpeechSynthesisUtterance();
+        msg.voiceURI = "native";
+        msg.text = val;
+        msg.lang = "en-US";
+        window.speechSynthesis.speak(msg);
+      }
+      $("#spokenResponse").addClass("is-active").find(".spoken-response__text").html(val);
+    }
+  </script>
+  <style type="text/css">
+    html {
+      box-sizing: border-box;
+    }
+    *, *:before, *:after {
+      box-sizing: inherit;
+    }
+    body {
+      background-color:;
+      font-family: "Titillium Web", Arial, sans-serif;
+      font-size: 20px;
+      margin: 0;
+    }
+    .container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      -webkit-transform: translate(-50%, -50%);
+    }
+    input {
+      background-color: #0B0B0B;
+      border: 1px solid #3F7F93;
+      color: #A6CAE6;
+      font-family: "Titillium Web";
+      font-size: 20px;
+      line-height: 43px;
+      padding: 0 0.75em;
+      width: 400px;
+      -webkit-transition: all 0.35s ease-in;
+    }
+    textarea {
+      background-color: #070F24;
+      border: 1px solid #122435;
+      color: #606B88;
+      padding: 0.5em;
+      width: 100%;
+      -webkit-transition: all 0.35s ease-in;
+    }
+    input:active, input:focus, textarea:active, textarea:focus {
+      outline: 1px solid #48788B;
+    }
+    .btn {
+      background-color: #126178;
+      border: 1px solid #549EAF;
+      color: #549EAF;
+      cursor: pointer;
+      display: inline-block;
+      font-family: "Titillium Web";
+      font-size: 20px;
+      line-height: 43px;
+      padding: 0 0.75em;
+      text-align: center;
+      text-transform: uppercase;
+      -webkit-transition: all 0.35s ease-in;
+    }
+    .btn:hover {
+      background-color: #1888A9;
+      color: #183035;
+    }
+    .debug {
+      bottom: 0;
+      position: fixed;
+      right: 0;
+    }
+    .debug__content {
+      font-size: 14px;
+      max-height: 0;
+      overflow: hidden;
+      -webkit-transition: all 0.35s ease-in;
+    }
+    .debug__content.is-active {
+      display: block;
+      max-height: 500px;
+    }
+    .debug__btn {
+      width: 100%;
+    }
+    .spoken-response {
+      max-height: 0;
+      overflow: hidden;
+      -webkit-transition: all 0.35s ease-in;
+    }
+    .spoken-response.is-active {
+      max-height: 400px;
+    }
+    .spoken-response__text {
+      background-color: #040E23;
+      color: #7584A2;
+      padding: 1em;
+    }
+  </style>
+</head>
+ <!-- Begin code with animation-->
+  <!doctype html>
+<html>
+    <head>
+        <title>sketch.js &raquo; Basic Example</title>
+        <link rel="stylesheet" href="example.css">
+        <style type="text/css">
+            html, body {
+                background: #222;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <script src="sketch.js"></script>
+        <script>
+        
+        // ----------------------------------------
+        // Particle
+        // ----------------------------------------
+
+        function Particle( x, y, radius ) {
+            this.init( x, y, radius );
+        }
+
+        Particle.prototype = {
+
+            init: function( x, y, radius ) {
+
+                this.alive = true;
+
+                this.radius = radius || 10;
+                this.wander = 0.15;
+                this.theta = random( TWO_PI );
+                this.drag = 0.92;
+                this.color = '#fff';
+
+                this.x = x || 0.0;
+                this.y = y || 0.0;
+
+                this.vx = 0.0;
+                this.vy = 0.0;
+            },
+
+            move: function() {
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.vx *= this.drag;
+                this.vy *= this.drag;
+
+                this.theta += random( -0.5, 0.5 ) * this.wander;
+                this.vx += sin( this.theta ) * 0.1;
+                this.vy += cos( this.theta ) * 0.1;
+
+                this.radius *= 0.96;
+                this.alive = this.radius > 0.5;
+            },
+
+            draw: function( ctx ) {
+
+                ctx.beginPath();
+                ctx.arc( this.x, this.y, this.radius, 0, TWO_PI );
+                ctx.fillStyle = this.color;
+                ctx.fill();
+            }
+        };
+
+        // ----------------------------------------
+        // Example
+        // ----------------------------------------
+
+        var MAX_PARTICLES = 280;
+        var COLOURS = [ '#69D2E7', '#A7DBD8', '#E0E4CC', '#F38630', '#FA6900', '#FF4E50', '#F9D423' ];
+
+        var particles = [];
+        var pool = [];
+
+        var demo = Sketch.create({
+            container: document.getElementById( 'container' ),
+            retina: 'auto'
+        });
+
+        demo.setup = function() {
+
+            // Set off some initial particles.
+            var i, x, y;
+
+            for ( i = 0; i < 20; i++ ) {
+                x = ( demo.width * 0.5 ) + random( -100, 100 );
+                y = ( demo.height * 0.5 ) + random( -100, 100 );
+                demo.spawn( x, y );
+            }
+        };
+
+        demo.spawn = function( x, y ) {
+            
+            var particle, theta, force;
+
+            if ( particles.length >= MAX_PARTICLES )
+                pool.push( particles.shift() );
+
+            particle = pool.length ? pool.pop() : new Particle();
+            particle.init( x, y, random( 5, 40 ) );
+
+            particle.wander = random( 0.5, 2.0 );
+            particle.color = random( COLOURS );
+            particle.drag = random( 0.9, 0.99 );
+
+            theta = random( TWO_PI );
+            force = random( 2, 8 );
+
+            particle.vx = sin( theta ) * force;
+            particle.vy = cos( theta ) * force;
+
+            particles.push( particle );
+        };
+
+        demo.update = function() {
+
+            var i, particle;
+
+            for ( i = particles.length - 1; i >= 0; i-- ) {
+
+                particle = particles[i];
+
+                if ( particle.alive ) particle.move();
+                else pool.push( particles.splice( i, 1 )[0] );
+            }
+        };
+
+        demo.draw = function() {
+
+            demo.globalCompositeOperation  = 'lighter';
+
+            for ( var i = particles.length - 1; i >= 0; i-- ) {
+                particles[i].draw( demo );
+            }
+        };
+
+        demo.mousemove = function() {
+
+            var particle, theta, force, touch, max, i, j, n;
+
+            for ( i = 0, n = demo.touches.length; i < n; i++ ) {
+
+                touch = demo.touches[i], max = random( 1, 4 );
+                for ( j = 0; j < max; j++ ) {
+                  demo.spawn( touch.x, touch.y );
+                }
+
+            }
+        };
+        
+        </script>
+    </body>
+</html>
+
+  
+  
+  
+
+  <div class="container">
+    <input id="speech" type="text" alt="enter_here">
+    <button id="rec" class="btn">Speak</button>
+    <div id="spokenResponse" class="spoken-response">
+      <div class="spoken-response__text"></div>
+    </div>
+  </div>
+  <div class="debug">
+    <div class="debug__btn btn">
+      
+    </div>
+    <div class="debug__content">
+      <textarea id=></textarea>
+    </div>
+  </div>
+
+  <link href="https://fonts.googleapis.com/css?family=Titillium+Web:200" rel="stylesheet" type="text/css">
+</body>
+</html>
+
+
+
+
+
+
+
+
+
