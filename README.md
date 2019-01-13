@@ -3,6 +3,8 @@
 
 Easily Edit Core Codings on @Glitch  Join: https://glitch.com/edit/#!/casprobeta
 
+>>Need a Glitch Account!
+
 #Build With:
 😃Dialogflow V1
 😃Nodejs
